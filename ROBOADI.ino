@@ -49,9 +49,7 @@ byte stopien[8]= {
   B00000,
 };
 
-
 int blue=0;
-
 
 int IN1=2;
 int IN2=7;
@@ -75,27 +73,20 @@ void setup() {
   pinMode(ENA,OUTPUT);
   pinMode(ENB,OUTPUT);
   pinMode(woltomierz, INPUT);
-
-
   Serial.begin(115200);
 }
 
 void loop() {
-
-
   accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
   r_angle = (atan2(ay, az) * 180 / pi + Angle_offset + offset_kat);
   omega =  Gyr_Gain * (gx +  Gry_offset);  
-
 
   bluetooth();
   akumulator();
   info();
 
-
   if (abs(r_angle)<45)
   {
-
     PID();
     PWMControl();
     // Status();
@@ -106,7 +97,6 @@ void loop() {
     analogWrite(ENB, 0);
   }
 }
-
 
 void PID(){
   kp = 15;  
@@ -119,7 +109,6 @@ void PID(){
   float K = 0.98;
   float A = K / (K + dt);
   f_angle = A * (f_angle + omega * dt) + (1 - A) * r_angle;  
-
 
   timeChange = (now - lastTime);
   if(timeChange >= SampleTime){
@@ -160,17 +149,14 @@ void PWMControl(){
     digitalWrite(IN3, LOW);
     digitalWrite(IN4, LOW);
   }
-
   analogWrite(ENA, min(255, abs(LOutput) + LMotor_offset));
   analogWrite(ENB, min(255, abs(ROutput) + RMotor_offset));
 }
-
 void akumulator()
 {
   voltage = 5.0 * ((float) analogRead(woltomierz)) / 1024.0;
   procent = (voltage - 3.01)*93.46;
 }
-
 void info()
 {
   lcd.setCursor(6,0);
@@ -187,7 +173,6 @@ void info()
   lcd.print(procent, 0); 
   lcd.print("%");
 }
-
 void Status()
 {
   Serial.print("omega=");
@@ -201,7 +186,6 @@ void Status()
   Serial.print("LOutput=");
   Serial.print(LOutput);
   Serial.print("\t");
-
 
   Serial.print("ROutput=");
   Serial.println(ROutput);
@@ -218,7 +202,6 @@ void Status()
   Serial.print("ki=");
   Serial.print(ki);
   Serial.print("\t");
-
 
   Serial.print("napiecie=");
   Serial.print(voltage);
